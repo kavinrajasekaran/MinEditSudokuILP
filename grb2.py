@@ -43,30 +43,6 @@ def pretty_grid(grid):
     return "\n".join(rows)
 
 
-def validate_grid(grid):
-    # Check if grid is square and values are in range
-    n = len(grid)
-    if n == 0:
-        raise ValueError("Grid is empty")
-        
-    for row in grid:
-        if len(row) != n:
-            raise ValueError("Grid must be square")
-            
-    if not is_perfect_square(n):
-        raise ValueError(f"Grid size {n} must be a perfect square")
-        
-    m = int(math.isqrt(n))
-    
-    for i in range(n):
-        for j in range(n):
-            val = grid[i][j]
-            if not (0 <= val <= n):
-                raise ValueError(f"Value {val} at ({i+1},{j+1}) is invalid")
-                
-    return n, m
-
-
 # gurobi model construction
 
 def setup_variables(data):
@@ -165,7 +141,8 @@ def setup_objective(data):
 
 
 def create_sudoku_model(grid, name="SudokuMinEdit"):
-    n, m = validate_grid(grid)
+    n = len(grid)
+    m = int(math.isqrt(n))
 
     solver = gp.Model(name)
 
